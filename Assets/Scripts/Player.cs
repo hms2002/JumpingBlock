@@ -21,6 +21,23 @@ public class Player : MonoBehaviour
     Animator anim;
     SpriteRenderer sprite;
 
+
+// 플레이어 구속 영역
+    bool canMove;
+    bool canJump;
+    bool canBuild;
+
+    IEnumerator IStartSetting()
+    {
+        canMove = false;
+        canJump = false;
+        canBuild = false;
+        yield return new WaitForSeconds(3);
+        canMove = true;
+        canJump = true;
+        canBuild = true;
+    }
+
 // 플레이어 이동 영역
     #region PlayerMove
 
@@ -28,11 +45,15 @@ public class Player : MonoBehaviour
     Rigidbody2D rigid;
 
     public int moveSpeed = 8;
+
     float xAxis;
 
     // #. 플레이어 이동 관련 함수
+    
     public void move()
     {
+        if (canMove == false) return;
+
         xAxis = Input.GetAxisRaw(moveKeyName);
         if(xAxis != 0)
         {
@@ -66,11 +87,14 @@ public class Player : MonoBehaviour
     public float jumpPower = 50;
 
     // #.플레이어 점프 관련 함수
-    public bool canJump()
+    float playerPosX;
+    float playerPosY;
+    public bool checkCanJump()
     {
+        if (canJump == false) return false;
         // 점프 전 조사 할 영역 설정
-        float playerPosX = transform.position.x + playerBoxColider.offset.x;
-        float playerPosY = transform.position.y + playerBoxColider.offset.y;
+        playerPosX = transform.position.x + playerBoxColider.offset.x;
+        playerPosY = transform.position.y + playerBoxColider.offset.y;
         // 플레이어의 콜라이더 바닥 y좌표값를 저장
         float playerUnderPosY = playerPosY - playerBoxColider.size.y / 2f;
 
@@ -78,6 +102,7 @@ public class Player : MonoBehaviour
         toJumpPoint = new Vector2(playerPosX + playerBoxColider.size.x / 2f, playerUnderPosY - 0.1f);
         // raycast2D를 통한 바닥 검사
         Collider2D hit = Physics2D.OverlapArea(fromJumpPoint, toJumpPoint, mask);
+
 
         if (hit)
         {
@@ -90,9 +115,13 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawCube(new Vector3(playerPosX, playerPosY - (playerBoxColider.size.y / 2) - (0.05f)), new Vector3(playerBoxColider.size.x, 0.1f));
+    }
     public void jump()
     {
-        if (canJump() && Input.GetKeyDown(jumpKeyCode))
+        if (checkCanJump() && Input.GetKeyDown(jumpKeyCode))
         {
 
             // 두 번 이어서 점프 했을 때 똑같은 높이로 점프하도록 y속도 초기화
@@ -119,10 +148,13 @@ public class Player : MonoBehaviour
     // 설치할 수 있는 블럭 개수
     int blockCount;
 
+    float boxLength = 1f;
+    float boxHeight = 1f;
 
     // 블럭 설치 관련 함수들
-    public bool canBuild()
+    public bool checkCanBuild()
     {
+        if (canBuild == false) return false;
         // 설치 전 조사 할 영역 설정
         // + 추후 블럭 크기에 따라 달리지도록 수정해야 함
         float playerPosX = transform.position.x + playerBoxColider.offset.x;
@@ -130,8 +162,6 @@ public class Player : MonoBehaviour
         // 플레이어의 콜라이더 바닥 y좌표값를 저장
         float playerUnderPosY = playerPosY - playerBoxColider.size.y / 2f;
 
-        float boxLength = 1f;
-        float boxHeight = 1f;
 
         fromBuildPoint = new Vector2(playerPosX - boxLength / 2f, playerUnderPosY - 0.1f);
         toBuildPoint = new Vector2(playerPosX + boxLength / 2f, playerUnderPosY - boxHeight);
@@ -153,7 +183,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(buildationKeyCode))
         {
-            if (!canBuild())
+            if (!checkCanBuild())
             {
                 Debug.Log("불가능!");
                 return;
@@ -176,7 +206,9 @@ public class Player : MonoBehaviour
         block = Resources.Load<GameObject>("Prefabs/BlockDefault");
 
         rigid = GetComponent<Rigidbody2D>();
-        
+
+        StartCoroutine("IStartSetting");
+
         // 플레어어 타입에 맞게 키 설정 해주기
         switch (playerType)
         {
