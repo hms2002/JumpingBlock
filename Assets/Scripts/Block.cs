@@ -31,7 +31,7 @@ public class Block : MonoBehaviour
         switch(blockType)
         {
             case BlockType.DefaultBlock:
-                lifeTime = 0.5f + Random.Range(0, 4.6f);
+                lifeTime = 0.5f + Random.Range(0, 2.6f);
                 break;
             case BlockType.StartingBlock:
                 lifeTime = 3f;
