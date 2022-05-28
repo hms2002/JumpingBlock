@@ -22,8 +22,9 @@ public class Block : MonoBehaviour
     Vector2 toBlockPoint;
 
     int layerMask;
-    private void Start()
+    private void OnEnable()
     {
+        
         layerMask = 1 << LayerMask.NameToLayer("Player");
 
         renderer = GetComponent<SpriteRenderer>();
@@ -37,6 +38,12 @@ public class Block : MonoBehaviour
                 lifeTime = 3f;
                 break;
         }
+        Color color = renderer.color;
+        color.a = 1;
+        renderer.color = color;
+    }
+    private void OnAwake()
+    {
 
         
         //// 플레이어 있는지 확인
@@ -54,7 +61,7 @@ public class Block : MonoBehaviour
         lifeTime -= Time.deltaTime;
         if (lifeTime <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
         else if(lifeTime <= 1)
         {

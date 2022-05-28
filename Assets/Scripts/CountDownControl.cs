@@ -20,7 +20,10 @@ public class CountDownControl : MonoBehaviour
     {
         count--;
         if (count <= 0)
+        {
+            GameManager.instance.isGameStart = true;
             Destroy(transform.parent.gameObject);
+        }
         else
             text.text = count.ToString();
             

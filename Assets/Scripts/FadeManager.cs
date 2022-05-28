@@ -10,7 +10,7 @@ public class FadeManager : MonoBehaviour
     Image fadeImg;
 
     public bool onFade = false;
-
+   
     private void Start()
     {
         fadeImg = transform.GetChild(FADE_IMG_IDX).GetComponent<Image>();

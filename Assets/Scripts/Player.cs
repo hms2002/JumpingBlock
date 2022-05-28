@@ -1,9 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public enum CharacterType
+    {
+        Boy,
+        Girl
+    }
+    public CharacterType characterType;
+
     // #.플레이어 선택 enum
     public enum PlayerType
     {
@@ -11,6 +19,11 @@ public class Player : MonoBehaviour
         PlayerB
     }
     public PlayerType playerType;
+
+    // 승자 실글톤
+    public static Player playerA = null;
+    public static Player playerB = null;
+    public static Player winner = null;
 
     // #.선택에 따라 조작키 바꾸는 변수
     string moveKeyName;
@@ -38,6 +51,8 @@ public class Player : MonoBehaviour
         canBuild = true;
     }
 
+    bool flipNormal = true;
+
 // 플레이어 이동 영역
     #region PlayerMove
 
@@ -53,14 +68,15 @@ public class Player : MonoBehaviour
     public void move()
     {
         if (canMove == false) return;
+        
 
         xAxis = Input.GetAxisRaw(moveKeyName);
         if(xAxis != 0)
         {
             if (xAxis > 0)
-                sprite.flipX = true;
+                sprite.flipX = flipNormal;
             else
-                sprite.flipX = false;
+                sprite.flipX = !flipNormal;
             
             anim.SetBool("isHorizontalZero", false);
         }
@@ -137,7 +153,7 @@ public class Player : MonoBehaviour
 // 플레이어 블럭 설치 영역
     #region PlayerBuildation
     // 설치 할 블럭 프리펩을 보관할 변수
-    GameObject block;
+    //GameObject block;
 
     // 플레이어 크기 가져올 boxCollider
     BoxCollider2D playerBoxColider;
@@ -151,10 +167,16 @@ public class Player : MonoBehaviour
     float boxLength = 1f;
     float boxHeight = 1f;
 
+    // 블럭 갯수 출력 텍스트
+    public Text blockCountText;
+
+    // 레이어마스크
+    int buildLayerMask;// = (-1) - (1 << LayerMask.NameToLayer("Effect"));
+
     // 블럭 설치 관련 함수들
     public bool checkCanBuild()
     {
-        if (canBuild == false) return false;
+        if (canBuild == false || blockCount <= 0) return false;
         // 설치 전 조사 할 영역 설정
         // + 추후 블럭 크기에 따라 달리지도록 수정해야 함
         float playerPosX = transform.position.x + playerBoxColider.offset.x;
@@ -166,10 +188,10 @@ public class Player : MonoBehaviour
         fromBuildPoint = new Vector2(playerPosX - boxLength / 2f, playerUnderPosY - 0.1f);
         toBuildPoint = new Vector2(playerPosX + boxLength / 2f, playerUnderPosY - boxHeight);
 
-        Debug.Log("From : " + fromBuildPoint);
-        Debug.Log("To : " + toBuildPoint);
+        //Debug.Log("From : " + fromBuildPoint);
+        //Debug.Log("To : " + toBuildPoint);
 
-        Collider2D hit = Physics2D.OverlapArea(fromBuildPoint, toBuildPoint);
+        Collider2D hit = Physics2D.OverlapArea(fromBuildPoint, toBuildPoint, buildLayerMask);
 
         if (hit)
         {
@@ -188,41 +210,90 @@ public class Player : MonoBehaviour
                 Debug.Log("불가능!");
                 return;
             }
+
             Vector2 position = new Vector2(transform.position.x, transform.position.y - 1);
-            Instantiate(block, position, transform.rotation);
+
+            GameObject block = BlockManager.instance.MakeObj(BlockManager.BlockType.DefaultBlock);
+            block.transform.position = position;
+            block.transform.rotation = transform.rotation;
+            //Instantiate(block, position, transform.rotation);
+            
+            blockCount--;
+            blockCountText.text = "남은 블럭 갯수 : " + blockCount;
         }
     }
 
     #endregion
 
+    #region DIE
+    public bool isDie = false;
+    public void Die()
+    {
+        isDie = true;
+
+        switch(playerType)
+        {
+            case PlayerType.PlayerA:
+                winner = playerB;
+                break;
+
+            case PlayerType.PlayerB:
+                winner = playerA;
+                break;
+        }
+
+        GameManager.instance.GameOver();
+    }
+    #endregion
+
     void Start()
     {
+        buildLayerMask = (-1) - (1 << LayerMask.NameToLayer("Effect"));
+
         sprite = GetComponent<SpriteRenderer>();
 
         anim = GetComponent<Animator>();
 
         playerBoxColider = GetComponent<BoxCollider2D>();
 
-        block = Resources.Load<GameObject>("Prefabs/BlockDefault");
+        //block = Resources.Load<GameObject>("Prefabs/BlockDefault");
 
         rigid = GetComponent<Rigidbody2D>();
 
         StartCoroutine("IStartSetting");
 
+        // 캐릭터 타입에 맞게 좌우 반전 및 설정 변경
+        switch (characterType)
+        {
+            case CharacterType.Boy:
+
+                break;
+            case CharacterType.Girl:
+                flipNormal = false;
+                break;
+        }
+
         // 플레어어 타입에 맞게 키 설정 해주기
         switch (playerType)
         {
             case PlayerType.PlayerA:
+                playerA = this;
                 moveKeyName = "HorizontalA";
                 jumpKeyCode = KeyCode.W;
                 buildationKeyCode = KeyCode.Space;
                 break;
             case PlayerType.PlayerB:
+                playerB = this;
                 moveKeyName = "HorizontalB";
                 jumpKeyCode = KeyCode.I;
                 buildationKeyCode = KeyCode.RightShift;
                 break;
         }
+
+        // 블럭 개수 설정
+        blockCount = Random.Range(10, 51);
+
+        blockCountText.text = "남은 블럭 갯수 : " + blockCount;
     }
 
     void Update()
