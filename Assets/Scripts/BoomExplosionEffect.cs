@@ -15,7 +15,7 @@ public class BoomExplosionEffect : MonoBehaviour
     private void OnEnable()
     {
         transform.position = new Vector2(Random.Range(-7, 7), Random.Range(-4, 4));
-        lifeTime = 0.2f;
+        lifeTime = 0.3f;
         anim.SetTrigger("Boom"); 
         Collider2D[] colloders = Physics2D.OverlapCircleAll(transform.position, 2);
         foreach (Collider2D collider in colloders)

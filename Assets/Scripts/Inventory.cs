@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+
         playerType = GetComponent<Player>().playerType;
         switch(playerType)
         {

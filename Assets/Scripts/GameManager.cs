@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     bool isGameOver;
     bool isFirstTimeOver;
 
+
+    public int TimeScale = 1;
     private void Awake()
     {
         // ΩÃ±€≈Ê √≥∏Æ
@@ -93,7 +95,7 @@ public class GameManager : MonoBehaviour
                 {
                     if(isGameStart)
                     {
-                        time -= Time.deltaTime;
+                        time -= Time.deltaTime * TimeScale;
                         timeText.text = "Time : " + (int)time;
                         if(!isFirstTimeOver)
                         {
