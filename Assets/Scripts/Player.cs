@@ -291,7 +291,7 @@ public class Player : MonoBehaviour
         }
 
         // 블럭 개수 설정
-        blockCount = Random.Range(10, 51);
+        blockCount = Random.Range(30, 61);
 
         blockCountText.text = "남은 블럭 갯수 : " + blockCount;
     }

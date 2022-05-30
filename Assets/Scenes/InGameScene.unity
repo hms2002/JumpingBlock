@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 347213985}
   - component: {fileID: 347213991}
   - component: {fileID: 347213990}
+  - component: {fileID: 347213992}
   m_Layer: 3
   m_Name: PlayerA
   m_TagString: Player
@@ -309,7 +310,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 347213984}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: d66648609f5bc33469d91d7f3b063162, type: 2}
   m_IsTrigger: 0
@@ -425,6 +426,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fdf6d3fcc12e04690840688cd44e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &347213992
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347213984}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: d66648609f5bc33469d91d7f3b063162, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.08}
+  m_Size: {x: 0.5, y: 1.1}
+  m_Direction: 0
 --- !u!1 &381756856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1592,7 @@ GameObject:
   - component: {fileID: 1049651585}
   - component: {fileID: 1049651591}
   - component: {fileID: 1049651590}
+  - component: {fileID: 1049651592}
   m_Layer: 3
   m_Name: PlayerB
   m_TagString: Player
@@ -1631,7 +1649,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1049651584}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: d66648609f5bc33469d91d7f3b063162, type: 2}
   m_IsTrigger: 0
@@ -1747,6 +1765,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fdf6d3fcc12e04690840688cd44e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &1049651592
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049651584}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: d66648609f5bc33469d91d7f3b063162, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.08}
+  m_Size: {x: 0.5, y: 1.1}
+  m_Direction: 0
 --- !u!1 &1059252547
 GameObject:
   m_ObjectHideFlags: 0
