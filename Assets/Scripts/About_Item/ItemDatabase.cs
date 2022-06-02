@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum ItemType
 {
-    nope
+    Boom,
+    AddBlock
 }
 
 public class ItemDatabase : MonoBehaviour
@@ -20,8 +21,6 @@ public class ItemDatabase : MonoBehaviour
             return;
         }
         instance = this;
-
-        DropItem((int)ItemType.nope, new Vector3(0, 0));
     }
 
     public List<Item> itemDB = new List<Item>();

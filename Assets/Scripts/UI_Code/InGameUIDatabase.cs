@@ -14,6 +14,13 @@ public class InGameUIDatabase : MonoBehaviour
 
     public Image inventoryA;
     public Image inventoryB;
+
+    public Image skillA;
+    public Image skillB;
+
+    public Sprite boySkillSprite;
+    public Sprite girlSkillSprite;
+
     private void Awake()
     {
         if(instance == null)

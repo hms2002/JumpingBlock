@@ -11,15 +11,4 @@ public class Item
     //public List<ItemEffects> effects = new List<ItemEffects>();
     public bool alreadyTouch = false;
 
-    public bool Use()
-    {
-        bool isUsed = false;
-
-        //foreach (ItemEffects efts in effects)
-        //{
-        //    isUsed = efts.ExecuteRole();
-        //}
-
-        return isUsed;
-    }
 }

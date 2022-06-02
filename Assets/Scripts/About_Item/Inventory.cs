@@ -7,11 +7,11 @@ public class Inventory : MonoBehaviour
 {
     Item item;
     Player.PlayerType playerType;
+    Sprite defaultImg;
     Image itemImage;
 
     private void Start()
     {
-
         playerType = GetComponent<Player>().playerType;
         switch(playerType)
         {
@@ -22,6 +22,7 @@ public class Inventory : MonoBehaviour
                 itemImage = InGameUIDatabase.instance.inventoryB;
                 break;
         }
+        defaultImg = itemImage.sprite;
     }
 
     bool AddItem(Item _item)
@@ -31,10 +32,33 @@ public class Inventory : MonoBehaviour
 
         return true;
     }
+    
+    void DeleteItem()
+    {
+        item = null;
+    }
+
+    const int addBlockCount = 10;
+    public void useItem()
+    {
+        if (item == null) return;
+        switch(item.itemType)
+        {
+            case ItemType.Boom:
+                BoomManager.instance.MakeBoom(transform.position);
+                DeleteItem();
+                break;
+            case ItemType.AddBlock:
+                GetComponent<Player>().AddBlock(addBlockCount);
+                DeleteItem();
+                break;
+        }
+        itemImage.sprite = defaultImg;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Item"))
+        if(collision.CompareTag("Item") && item == null)
         {
             FieldItem item = collision.GetComponent<FieldItem>();
             if (AddItem(item.GetItem()))

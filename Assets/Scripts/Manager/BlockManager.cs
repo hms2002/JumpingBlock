@@ -15,12 +15,19 @@ public class BlockManager : MonoBehaviour
     }
 
     public GameObject src_DefaultBlock;
+    BoxCollider2D defaultBlockCollider;
+    public float defaultBlockSizeX;
+    public float defaultBlockSizeY;
 
     GameObject[] defaultBlock = new GameObject[50];
 
     void Start()
     {
         instance = this;
+
+        defaultBlockCollider = src_DefaultBlock.GetComponent<BoxCollider2D>();
+        defaultBlockSizeX = defaultBlockCollider.size.x;
+        defaultBlockSizeY = defaultBlockCollider.size.y;
 
         for (int i = 0; i < MAX_BLOCK_COUNT; i++)
         {

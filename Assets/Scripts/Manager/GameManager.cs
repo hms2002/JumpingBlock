@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
     float boomDropCoolTime;
     float boolDropCurTime;
 
+    // 아이템 스폰 시간
+    float itemSpawnCoolTime = 5;
+    float itemSpawnCurTime = 5;
+
     // 게임 종료 확인
     GameObject gameOverUI;
     Text winnerText;
@@ -102,7 +106,9 @@ public class GameManager : MonoBehaviour
                             boolDropCurTime -= Time.deltaTime;
                             if (boolDropCurTime <= 0)
                             {
-                                GameObject boom = BoomManager.instance.MakeBoom(); ;
+                                GameObject boom = BoomManager.instance.MakeExplosion(new Vector2(Random.Range(-7, 7), Random.Range(-4, 4)));
+                                //boom.transform.position = new Vector2(Random.Range(-7, 7), Random.Range(-4, 4));
+                                //boom.GetComponent<BoomExplosionEffect>().Explode();
                                 boomDropCoolTime = Random.Range(0.5f, 1f);
                                 boolDropCurTime = boomDropCoolTime;
                             }
@@ -118,6 +124,13 @@ public class GameManager : MonoBehaviour
                             {
                                 GameOver();
                             }
+                        }
+
+                        itemSpawnCurTime -= Time.deltaTime;
+                        if(itemSpawnCurTime <= 0)
+                        {
+                            itemSpawnCurTime = itemSpawnCoolTime;
+                           ItemDatabase.instance.DropItem(Random.Range(0, 2), new Vector3(Random.Range(-7, 8), Random.Range(-3, 4)));
                         }
                     }
                 }

@@ -29,6 +29,9 @@ public class Player : MonoBehaviour
     string moveKeyName;
     KeyCode jumpKeyCode;
     KeyCode buildationKeyCode;
+    KeyCode useItemKeyCode;
+    KeyCode useSkillKeyCode;
+
 
     // 범용적으로 쓰이는 애니메이터, 스프라이트 변수 선언
     Animator anim;
@@ -51,6 +54,23 @@ public class Player : MonoBehaviour
         canBuild = true;
     }
 
+    public void PlayerConfine(float time)
+    {
+        StopCoroutine("IPlayerConFine");
+        StartCoroutine("IPlayerConFine", time);
+    }
+
+    IEnumerator IPlayerConFine(float time)
+    {
+        canMove = false;
+        canJump = false;
+        canBuild = false;
+        yield return new WaitForSeconds(time);
+        canMove = true;
+        canJump = true;
+        canBuild = true;
+    }
+
     bool flipNormal = true;
 
 // 플레이어 이동 영역
@@ -67,8 +87,10 @@ public class Player : MonoBehaviour
     
     public void move()
     {
-        if (canMove == false) return;
-        
+        if (canMove == false)
+        {
+            return;
+        }
 
         xAxis = Input.GetAxisRaw(moveKeyName);
         if(xAxis != 0)
@@ -164,6 +186,12 @@ public class Player : MonoBehaviour
     // 설치할 수 있는 블럭 개수
     int blockCount;
 
+    public void AddBlock(int count)
+    {
+        blockCount += count;
+        blockCountText.text = "남은 블럭 갯수 : " + blockCount;
+    }
+
     float boxLength = 1f;
     float boxHeight = 1f;
 
@@ -184,6 +212,9 @@ public class Player : MonoBehaviour
         // 플레이어의 콜라이더 바닥 y좌표값를 저장
         float playerUnderPosY = playerPosY - playerBoxColider.size.y / 2f;
 
+
+        boxLength = BlockManager.instance.defaultBlockSizeX;
+        boxHeight = BlockManager.instance.defaultBlockSizeY;
 
         fromBuildPoint = new Vector2(playerPosX - boxLength / 2f, playerUnderPosY - 0.1f);
         toBuildPoint = new Vector2(playerPosX + boxLength / 2f, playerUnderPosY - boxHeight);
@@ -246,6 +277,55 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    #region UseItem
+    Inventory inventory;
+    void useItem()
+    {
+        if(Input.GetKeyDown(useItemKeyCode))
+            inventory.useItem();
+    }
+    #endregion
+
+    #region UseSkill
+    delegate void Skill();
+    Skill playerSkill;
+
+    float skillCoolTime;
+    float skillCurTime;
+
+    const float BOY_SKILL_COOL_TIME = 0.5f;
+    const float GIRL_SKILL_COOL_TIME = 1f;
+
+    Image skillImg;
+    Sprite skillSprite;
+
+    void useSkill()
+    {
+        skillCurTime -= Time.deltaTime;
+        skillImg.fillAmount = (skillCoolTime - skillCurTime) / skillCoolTime;
+        if(Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0)
+        {
+            playerSkill();
+            skillCurTime = skillCoolTime;
+        }
+    }
+
+    void BoySkill()
+    {
+        GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.boySkillEffect, transform.position, Quaternion.identity);
+        Vector3 vector3 = skillEffect.transform.localScale;
+        vector3.x = sprite.flipX ? 1 : -1;
+        skillEffect.transform.localScale = vector3;
+    }
+    void GirlSkill()
+    {
+        GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.girlSkillEffect, transform.position, Quaternion.identity);
+        Vector3 vector3 = skillEffect.transform.localScale;
+        vector3.x = sprite.flipX ? -1 : 1;
+        skillEffect.transform.localScale = vector3;
+    }
+    #endregion
+
     void Start()
     {
         buildLayerMask = (-1) - (1 << LayerMask.NameToLayer("Effect"));
@@ -267,9 +347,17 @@ public class Player : MonoBehaviour
         {
             case CharacterType.Boy:
 
+                playerSkill = BoySkill;
+                skillCoolTime = skillCurTime = BOY_SKILL_COOL_TIME;
+
+                skillSprite = InGameUIDatabase.instance.boySkillSprite;
                 break;
             case CharacterType.Girl:
                 flipNormal = false;
+                playerSkill = GirlSkill;
+                skillCoolTime = skillCurTime = GIRL_SKILL_COOL_TIME;
+
+                skillSprite = InGameUIDatabase.instance.girlSkillSprite;
                 break;
         }
 
@@ -281,14 +369,27 @@ public class Player : MonoBehaviour
                 moveKeyName = "HorizontalA";
                 jumpKeyCode = KeyCode.W;
                 buildationKeyCode = KeyCode.Space;
+                useItemKeyCode = KeyCode.R;
+                useSkillKeyCode = KeyCode.E;
+
+                skillImg = InGameUIDatabase.instance.skillA;
+                skillImg.sprite = skillSprite;
                 break;
             case PlayerType.PlayerB:
                 playerB = this;
                 moveKeyName = "HorizontalB";
                 jumpKeyCode = KeyCode.I;
                 buildationKeyCode = KeyCode.RightShift;
+                useItemKeyCode = KeyCode.P;
+                useSkillKeyCode = KeyCode.O;
+
+                skillImg = InGameUIDatabase.instance.skillB;
+                skillImg.sprite = skillSprite;
                 break;
         }
+
+        // 인벤토리 연결
+        inventory = GetComponent<Inventory>();
 
         // 블럭 개수 설정
         blockCount = Random.Range(30, 61);
@@ -301,5 +402,7 @@ public class Player : MonoBehaviour
         move();
         jump();
         build();
+        useItem();
+        useSkill();
     }
 }
