@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
     public enum CharacterType
     {
         Boy,
-        Girl
+        Girl,
+        EndIdx
     }
     public CharacterType characterType;
 
@@ -153,10 +154,10 @@ public class Player : MonoBehaviour
             return false;
         }
     }
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawCube(new Vector3(playerPosX, playerPosY - (playerBoxColider.size.y / 2) - (0.05f)), new Vector3(playerBoxColider.size.x, 0.1f));
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawCube(new Vector3(playerPosX, playerPosY - (playerBoxColider.size.y / 2) - (0.05f)), new Vector3(playerBoxColider.size.x, 0.1f));
+    //}
     public void jump()
     {
         if (checkCanJump() && Input.GetKeyDown(jumpKeyCode))
@@ -293,38 +294,98 @@ public class Player : MonoBehaviour
     float skillCoolTime;
     float skillCurTime;
 
-    const float BOY_SKILL_COOL_TIME = 0.5f;
-    const float GIRL_SKILL_COOL_TIME = 1f;
+    const float BOY_SKILL_COOL_TIME = 10f;
+    const float GIRL_SKILL_COOL_TIME = 5f;
 
     Image skillImg;
     Sprite skillSprite;
 
-    void useSkill()
-    {
-        skillCurTime -= Time.deltaTime;
-        skillImg.fillAmount = (skillCoolTime - skillCurTime) / skillCoolTime;
-        if(Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0)
-        {
-            playerSkill();
-            skillCurTime = skillCoolTime;
-        }
-    }
+    //void useSkill()
+    //{
+    //    skillCurTime -= Time.deltaTime;
+    //    skillImg.fillAmount = (skillCoolTime - skillCurTime) / skillCoolTime;
+    //    if(Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0)
+    //    {
+    //        playerSkill();
+    //        skillCurTime = skillCoolTime;
+    //    }
+    //}
 
+    const int MAX_BOY_SKILL_COUNT = 3;
+    int boySkillCount = MAX_BOY_SKILL_COUNT;
     void BoySkill()
     {
-        GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.boySkillEffect, transform.position, Quaternion.identity);
-        Vector3 vector3 = skillEffect.transform.localScale;
-        vector3.x = sprite.flipX ? 1 : -1;
-        skillEffect.transform.localScale = vector3;
+        skillCurTime -= Time.deltaTime;
+        skillImg.fillAmount = (float)boySkillCount / (float)MAX_BOY_SKILL_COUNT;
+
+        if (Input.GetKeyDown(useSkillKeyCode) && boySkillCount > 0)
+        {
+            boySkillCount--;
+            GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.boySkillEffect, transform.position, Quaternion.identity);
+            Vector3 vector3 = skillEffect.transform.localScale;
+            vector3.x = sprite.flipX ? 1 : -1;
+            skillEffect.transform.localScale = vector3;
+        }
+        if(skillCurTime <= 0)
+        {
+            boySkillCount = MAX_BOY_SKILL_COUNT;
+            skillCurTime = skillCoolTime;
+        }
+
+        //GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.boySkillEffect, transform.position, Quaternion.identity);
+        //Vector3 vector3 = skillEffect.transform.localScale;
+        //vector3.x = sprite.flipX ? 1 : -1;
+        //skillEffect.transform.localScale = vector3;
     }
     void GirlSkill()
     {
-        GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.girlSkillEffect, transform.position, Quaternion.identity);
-        Vector3 vector3 = skillEffect.transform.localScale;
-        vector3.x = sprite.flipX ? -1 : 1;
-        skillEffect.transform.localScale = vector3;
+        skillCurTime -= Time.deltaTime;
+        skillImg.fillAmount = (skillCoolTime - skillCurTime) / skillCoolTime;
+
+        if (Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0)
+        {
+            GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.girlSkillEffect, transform.position, Quaternion.identity);
+            Vector3 vector3 = skillEffect.transform.localScale;
+            vector3.x = sprite.flipX ? -1 : 1;
+            skillEffect.transform.localScale = vector3;
+
+            skillCurTime = skillCoolTime;
+        }
+        //GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.girlSkillEffect, transform.position, Quaternion.identity);
+        //Vector3 vector3 = skillEffect.transform.localScale;
+        //vector3.x = sprite.flipX ? -1 : 1;
+        //skillEffect.transform.localScale = vector3;
     }
     #endregion
+
+
+    private void Awake()
+    {
+        // 플레어어 타입에 맞게 키 설정 해주기
+        switch (playerType)
+        {
+            case PlayerType.PlayerA:
+                playerA = this;
+                moveKeyName = "HorizontalA";
+                jumpKeyCode = KeyCode.W;
+                buildationKeyCode = KeyCode.Space;
+                useItemKeyCode = KeyCode.S;
+                useSkillKeyCode = KeyCode.T;
+
+                //skillImg.sprite = skillSprite;
+                break;
+            case PlayerType.PlayerB:
+                playerB = this;
+                moveKeyName = "HorizontalB";
+                jumpKeyCode = KeyCode.UpArrow;
+                buildationKeyCode = KeyCode.Keypad1;
+                useItemKeyCode = KeyCode.DownArrow;
+                useSkillKeyCode = KeyCode.Keypad2;
+
+                //skillImg.sprite = skillSprite;
+                break;
+        }
+    }
 
     void Start()
     {
@@ -351,6 +412,7 @@ public class Player : MonoBehaviour
                 skillCoolTime = skillCurTime = BOY_SKILL_COOL_TIME;
 
                 skillSprite = InGameUIDatabase.instance.boySkillSprite;
+                anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.Boy];
                 break;
             case CharacterType.Girl:
                 flipNormal = false;
@@ -358,6 +420,10 @@ public class Player : MonoBehaviour
                 skillCoolTime = skillCurTime = GIRL_SKILL_COOL_TIME;
 
                 skillSprite = InGameUIDatabase.instance.girlSkillSprite;
+                anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.Girl];
+                break;
+            default:
+                Debug.LogError("타입이 맞는 게 없습니다!");
                 break;
         }
 
@@ -365,28 +431,13 @@ public class Player : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.PlayerA:
-                playerA = this;
-                moveKeyName = "HorizontalA";
-                jumpKeyCode = KeyCode.W;
-                buildationKeyCode = KeyCode.Space;
-                useItemKeyCode = KeyCode.R;
-                useSkillKeyCode = KeyCode.E;
-
                 skillImg = InGameUIDatabase.instance.skillA;
-                skillImg.sprite = skillSprite;
                 break;
             case PlayerType.PlayerB:
-                playerB = this;
-                moveKeyName = "HorizontalB";
-                jumpKeyCode = KeyCode.I;
-                buildationKeyCode = KeyCode.RightShift;
-                useItemKeyCode = KeyCode.P;
-                useSkillKeyCode = KeyCode.O;
-
                 skillImg = InGameUIDatabase.instance.skillB;
-                skillImg.sprite = skillSprite;
                 break;
         }
+        skillImg.sprite = skillSprite;
 
         // 인벤토리 연결
         inventory = GetComponent<Inventory>();
@@ -403,6 +454,6 @@ public class Player : MonoBehaviour
         jump();
         build();
         useItem();
-        useSkill();
+        playerSkill();
     }
 }

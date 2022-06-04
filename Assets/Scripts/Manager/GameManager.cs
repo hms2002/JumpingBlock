@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     public enum BuildIdx
     {
         MainMenu,
-        InGameScene
+        InGameScene,
+        SelectCharacterScene,
+        SelectBackGroundScene
     }
 
     private static BuildIdx _sceneNum;
@@ -29,11 +31,11 @@ public class GameManager : MonoBehaviour
     Text timeText;
     float time = 60;
     float boomDropCoolTime;
-    float boolDropCurTime;
+    float boomDropCurTime;
 
     // 아이템 스폰 시간
-    float itemSpawnCoolTime = 5;
-    float itemSpawnCurTime = 5;
+    float itemSpawnCoolTime = 2.5f;
+    float itemSpawnCurTime = 2.5f;
 
     // 게임 종료 확인
     GameObject gameOverUI;
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     public bool isGameStart;
     bool isGameOver;
-    bool isFirstTimeOver;
+    bool isFirstTime;
 
 
     public int TimeScale = 1;
@@ -65,7 +67,38 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         boomDropCoolTime = Random.Range(0.5f, 1f);
-        boolDropCurTime = boomDropCoolTime;
+        boomDropCurTime = boomDropCoolTime;
+    }
+
+    private Player.CharacterType _playerCharactorType_A = Player.CharacterType.EndIdx;
+    public Player.CharacterType playerCharactorType_A { 
+        get{ return _playerCharactorType_A; } 
+        set 
+        { 
+            _playerCharactorType_A = value;
+            if (playerCharactorType_B != Player.CharacterType.EndIdx) SceneManager.LoadScene((int)BuildIdx.SelectBackGroundScene);
+        } 
+    }
+    private Player.CharacterType _playerCharactorType_B = Player.CharacterType.EndIdx;
+    public Player.CharacterType playerCharactorType_B
+    {
+        get { return _playerCharactorType_B; }
+        set
+        {
+            _playerCharactorType_B = value;
+            if (playerCharactorType_B != Player.CharacterType.EndIdx) SceneManager.LoadScene((int)BuildIdx.SelectBackGroundScene);
+        }
+    }
+
+    private BackGroundType _backGroundType = BackGroundType.BrokenCity;
+    public BackGroundType backGroundType
+    {
+        get { return _backGroundType; }
+        set
+        {
+            _backGroundType = value;
+            SceneManager.LoadScene((int)BuildIdx.InGameScene);
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -76,11 +109,23 @@ public class GameManager : MonoBehaviour
         {
             case BuildIdx.InGameScene:
                 isGameOver = false;
-                isFirstTimeOver = true;
+                isFirstTime = true;
                 isGameStart = false;
                 timeText = InGameUIDatabase.instance.timeText;
                 gameOverUI = InGameUIDatabase.instance.gameOverUI;
                 winnerText = InGameUIDatabase.instance.winnerText;
+
+                if (playerCharactorType_A == Player.CharacterType.EndIdx)
+                    playerCharactorType_A = Player.CharacterType.Boy;
+                if (playerCharactorType_B == Player.CharacterType.EndIdx)
+                    playerCharactorType_B = Player.CharacterType.Girl;
+
+                Player.playerA.characterType = playerCharactorType_A;
+                Player.playerB.characterType = playerCharactorType_B;
+
+                InGameUIDatabase.instance.backGround.sprite = InGameUIDatabase.instance.backGroundImg[(int)backGroundType];
+                break;
+            case BuildIdx.SelectCharacterScene:
                 break;
         }
     }
@@ -101,23 +146,24 @@ public class GameManager : MonoBehaviour
                     {
                         time -= Time.deltaTime * TimeScale;
                         timeText.text = "Time : " + (int)time;
-                        if(!isFirstTimeOver)
+                        if(!isFirstTime)
                         {
-                            boolDropCurTime -= Time.deltaTime;
-                            if (boolDropCurTime <= 0)
+                            boomDropCurTime -= Time.deltaTime;
+                            if (boomDropCurTime <= 0)
                             {
                                 GameObject boom = BoomManager.instance.MakeExplosion(new Vector2(Random.Range(-7, 7), Random.Range(-4, 4)));
                                 //boom.transform.position = new Vector2(Random.Range(-7, 7), Random.Range(-4, 4));
                                 //boom.GetComponent<BoomExplosionEffect>().Explode();
                                 boomDropCoolTime = Random.Range(0.5f, 1f);
-                                boolDropCurTime = boomDropCoolTime;
+                                boomDropCurTime = boomDropCoolTime;
                             }
                         }
                         if(time <= 0)
                         {
-                            if(isFirstTimeOver)
+                            if(isFirstTime)
                             {
-                                isFirstTimeOver = false;
+                                SoundManager.instance.PlayFaster();
+                                isFirstTime = false;
                                 time = 30;
                             }
                             else
@@ -179,7 +225,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
        
-        SceneManager.LoadScene((int)BuildIdx.InGameScene);
+        SceneManager.LoadScene((int)BuildIdx.SelectCharacterScene);
     }
 
     public void onClickOptionButton()

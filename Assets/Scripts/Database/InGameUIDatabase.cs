@@ -21,6 +21,9 @@ public class InGameUIDatabase : MonoBehaviour
     public Sprite boySkillSprite;
     public Sprite girlSkillSprite;
 
+    public SpriteRenderer backGround;
+    public Sprite[] backGroundImg;
+
     private void Awake()
     {
         if(instance == null)

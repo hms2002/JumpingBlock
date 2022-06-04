@@ -21,6 +21,8 @@ public class ItemDatabase : MonoBehaviour
             return;
         }
         instance = this;
+
+
     }
 
     public List<Item> itemDB = new List<Item>();

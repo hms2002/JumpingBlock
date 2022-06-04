@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PunchSkillEffect : MonoBehaviour
 {
-    int power = 1000;
+    int power = 500;
 
     private void Start()
     {

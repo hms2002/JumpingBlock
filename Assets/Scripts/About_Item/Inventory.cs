@@ -5,7 +5,32 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    const int MAX_QUEUE_IDX = 4;
+    int front = 0;
+    int rear = 0;
+    bool isEmpty() 
+    {
+        if (front == rear) return true;
+        else return false; 
+    }
+    bool isFull()
+    {
+        if((rear + MAX_QUEUE_IDX - front) % MAX_QUEUE_IDX == MAX_QUEUE_IDX - 1)
+        {
+            return true;
+        }
+        return false;
+    }
+    void pushItem(Item item)
+    {
+        rear = (rear + 1) % MAX_QUEUE_IDX;
+        itemQueue[rear] = item;
+    }
+
     Item item;
+    Item[] itemQueue = new Item[MAX_QUEUE_IDX];
+
+
     Player.PlayerType playerType;
     Sprite defaultImg;
     Image itemImage;
@@ -27,21 +52,30 @@ public class Inventory : MonoBehaviour
 
     bool AddItem(Item _item)
     {
-        item = _item;
-        itemImage.sprite = item.itemImages;
+        pushItem(_item);
+
+        item = itemQueue[(front + 1) % MAX_QUEUE_IDX];
+        itemImage.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
 
         return true;
+    }
+    Item Pop()
+    {
+        if (isEmpty()) return null;
+        front = (front + 1) % MAX_QUEUE_IDX;
+        return itemQueue[front];
     }
     
     void DeleteItem()
     {
         item = null;
+        front = (front + 1) % MAX_QUEUE_IDX;
     }
 
     const int addBlockCount = 10;
     public void useItem()
     {
-        if (item == null) return;
+        if (isEmpty() == true) return;
         switch(item.itemType)
         {
             case ItemType.Boom:
@@ -53,12 +87,20 @@ public class Inventory : MonoBehaviour
                 DeleteItem();
                 break;
         }
-        itemImage.sprite = defaultImg;
+
+        if (isEmpty() == true)
+        {
+            itemImage.sprite = defaultImg;
+            return;
+        }
+
+        item = itemQueue[(front + 1) % MAX_QUEUE_IDX];
+        itemImage.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Item") && item == null)
+        if(collision.CompareTag("Item") && isFull() == false)
         {
             FieldItem item = collision.GetComponent<FieldItem>();
             if (AddItem(item.GetItem()))
