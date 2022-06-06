@@ -88,5 +88,7 @@ public class CharactorSelectManager : MonoBehaviour
         cursor.selected = characterLock[cursor.posIdx].Select(cursor.type);
 
         if (cursor.selected) cursor._transform.gameObject.SetActive(false);
+        // »ç¿îµå
+        SoundManager.instance.PlaySelectSound();
     }
 }

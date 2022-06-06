@@ -39,6 +39,8 @@ public class BackGroundSelectManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Keypad1))
         {
             GameManager.instance.backGroundType = (BackGroundType)transformIdx;
+            // »ç¿îµå
+            SoundManager.instance.PlaySelectSound();
         }
     }
 }

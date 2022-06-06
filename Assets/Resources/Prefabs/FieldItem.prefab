@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1798573254755969710}
   - component: {fileID: 9112483485640763743}
   - component: {fileID: 5449843600466289536}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FieldItem
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5981715198113918308}
   - component: {fileID: 6193809775934890657}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 4695741094576615834}
   - component: {fileID: 3130821558373224806}
   - component: {fileID: 2369385105797097104}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

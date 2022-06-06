@@ -49,6 +49,8 @@ public class MainMenu : MonoBehaviour
             Button pointedBtn = menues[(int)selected].transform.GetChild(BTN_IDX).GetComponent<Button>();
             Debug.Log(pointedBtn.gameObject.name);
             pointedBtn.onClick.Invoke();
+            // »ç¿îµå
+            SoundManager.instance.PlaySelectSound();
         }
     }
 }

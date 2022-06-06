@@ -389,7 +389,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        buildLayerMask = (-1) - (1 << LayerMask.NameToLayer("Effect"));
+        buildLayerMask = ((1 << LayerMask.NameToLayer("Effect")) | (1 << LayerMask.NameToLayer("Item")));
+        buildLayerMask = ~buildLayerMask;
+        //buildLayerMask = (-1) - (1 << LayerMask.NameToLayer("Effect"));
 
         sprite = GetComponent<SpriteRenderer>();
 

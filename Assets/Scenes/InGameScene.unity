@@ -662,6 +662,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f2d105d032bea4489cd58db0a8188aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainMenuBGM: {fileID: 8300000, guid: d33879486caeb624abb0a1a0e8b191a3, type: 3}
+  FightBGM: {fileID: 8300000, guid: 93fd544fe3d7a7d4b85db0d757953a9e, type: 3}
+  BoomEffectSound1: {fileID: 8300000, guid: 101b6197aab6434478ef2bc319bfd857, type: 3}
+  BoomEffectSound2: {fileID: 8300000, guid: fe0320e59b56d55458e75876341dc4e6, type: 3}
+  BoomEffectSound3: {fileID: 8300000, guid: 129aea5067fbb0a42a7f4278c8b58111, type: 3}
+  BuildBlockEffectSound: {fileID: 8300000, guid: 9e0ca1cac4347d6439bb5327c11e3630, type: 3}
+  SelectEffectSound: {fileID: 8300000, guid: 8469d05c8adb67c4588def5101cab8c6, type: 3}
 --- !u!82 &290105822
 AudioSource:
   m_ObjectHideFlags: 0

@@ -1,10 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
+
+    public AudioClip MainMenuBGM;
+    public AudioClip FightBGM;
+
+    public AudioClip BoomEffectSound1;
+    public AudioClip BoomEffectSound2;
+    public AudioClip BoomEffectSound3;
+
+    public AudioClip BuildBlockEffectSound;
+
+    public AudioClip SelectEffectSound;
 
     AudioSource audioSource;
 
@@ -23,10 +35,31 @@ public class SoundManager : MonoBehaviour
 
         // 씬 이동해도 유지
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoad;
+    }
+
+    void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        switch(scene.buildIndex)
+        {
+            case (int)GameManager.BuildIdx.MainMenu:
+                audioSource.clip = MainMenuBGM;
+                audioSource.Play();
+                break;
+            case (int)GameManager.BuildIdx.InGameScene:
+                audioSource.clip = FightBGM;
+                audioSource.Play();
+                break;
+        }
     }
 
     public void PlayFaster()
     {
         audioSource.pitch = 1.5f;
+    }
+
+    public void PlaySelectSound()
+    {
+        audioSource.PlayOneShot(SelectEffectSound);
     }
 }
