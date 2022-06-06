@@ -62,4 +62,25 @@ public class SoundManager : MonoBehaviour
     {
         audioSource.PlayOneShot(SelectEffectSound);
     }
+
+    public void PlayBoomSound()
+    {
+        switch (Random.Range(0, 3))
+        {
+            case 0:
+                audioSource.PlayOneShot(BoomEffectSound1);
+                break;
+            case 1:
+                audioSource.PlayOneShot(BoomEffectSound2);
+                break;
+            case 2:
+                audioSource.PlayOneShot(BoomEffectSound3);
+                break;
+        }
+
+    }
+    public void PlayBuildBlockEffectSound()
+    {
+        audioSource.PlayOneShot(BuildBlockEffectSound);
+    }
 }

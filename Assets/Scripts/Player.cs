@@ -252,6 +252,8 @@ public class Player : MonoBehaviour
             
             blockCount--;
             blockCountText.text = "남은 블럭 갯수 : " + blockCount;
+
+            SoundManager.instance.PlayBuildBlockEffectSound();
         }
     }
 

@@ -30,6 +30,8 @@ public class BoomExplosionEffect : MonoBehaviour
                 collider.gameObject.SetActive(false);
             }
         }
+        // »ç¿îµå
+        SoundManager.instance.PlayBoomSound();
     }
 
     private void Update()
