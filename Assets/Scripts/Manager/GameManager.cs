@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _playerCharactorType_B = value;
-            if (playerCharactorType_B != Player.CharacterType.EndIdx) SceneManager.LoadScene((int)BuildIdx.SelectBackGroundScene);
+            if (playerCharactorType_A != Player.CharacterType.EndIdx) SceneManager.LoadScene((int)BuildIdx.SelectBackGroundScene);
         }
     }
 

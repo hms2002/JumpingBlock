@@ -22,21 +22,21 @@ public class BackGroundSelectManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.J))
+        if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if(transformIdx != MIN_BACKGROUND_IDX)
             {
                 cursorTransform.position = backGroundSelectPos[--transformIdx].position;
             }
         }
-        if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.L))
+        if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             if (transformIdx != MAX_BACKGROUND_IDX)
             {
                 cursorTransform.position = backGroundSelectPos[++transformIdx].position;
             }
         }
-        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightShift))
+        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Keypad1))
         {
             GameManager.instance.backGroundType = (BackGroundType)transformIdx;
         }

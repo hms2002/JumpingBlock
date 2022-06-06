@@ -47,15 +47,15 @@ public class CharactorSelectManager : MonoBehaviour
             SelectCharactor(cursorA);
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveCursor(cursorB, LEFT);
         }
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveCursor(cursorB, RIGHT);
         }
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             SelectCharactor(cursorB);
         }

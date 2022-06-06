@@ -413,6 +413,13 @@ public class Player : MonoBehaviour
 
                 skillSprite = InGameUIDatabase.instance.boySkillSprite;
                 anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.Boy];
+
+                switch (playerType)
+                {
+                    case PlayerType.PlayerB:
+                        sprite.flipX = false;
+                        break;
+                }
                 break;
             case CharacterType.Girl:
                 flipNormal = false;
@@ -421,6 +428,14 @@ public class Player : MonoBehaviour
 
                 skillSprite = InGameUIDatabase.instance.girlSkillSprite;
                 anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.Girl];
+
+                switch (playerType)
+                {
+                    case PlayerType.PlayerB:
+                        sprite.flipX = true;
+                        break;
+                }
+
                 break;
             default:
                 Debug.LogError("타입이 맞는 게 없습니다!");
