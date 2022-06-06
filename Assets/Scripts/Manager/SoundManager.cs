@@ -31,7 +31,7 @@ public class SoundManager : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
-        audioSource.volume = 0.05f;
+        audioSource.volume = 0.02f;
 
         // 씬 이동해도 유지
         DontDestroyOnLoad(gameObject);
@@ -60,7 +60,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySelectSound()
     {
-        audioSource.PlayOneShot(SelectEffectSound);
+        audioSource.PlayOneShot(SelectEffectSound, 2f);
     }
 
     public void PlayBoomSound()
