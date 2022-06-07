@@ -16,6 +16,7 @@ TagManager:
   - Ground
   - Effect
   - Item
+  - MetalGround
   - 
   - 
   - 
@@ -34,9 +35,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - PlayerA
+  - PlayerB
   - 
   - 
   m_SortingLayers:

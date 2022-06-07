@@ -18,6 +18,8 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip SelectEffectSound;
 
+    public AudioClip[] Player_SkillEffect_Sound = new AudioClip[4];
+
     AudioSource audioSource;
 
     private void Awake()
@@ -82,5 +84,9 @@ public class SoundManager : MonoBehaviour
     public void PlayBuildBlockEffectSound()
     {
         audioSource.PlayOneShot(BuildBlockEffectSound);
+    }
+    public void PlayPlayerSkillEffectSound(int idx)
+    {
+        audioSource.PlayOneShot(Player_SkillEffect_Sound[idx], 2);
     }
 }

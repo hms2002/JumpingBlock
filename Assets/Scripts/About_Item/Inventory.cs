@@ -21,6 +21,11 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
+
+    int queueCount()
+    {
+        return (rear + MAX_QUEUE_IDX - front) % MAX_QUEUE_IDX;
+    }
     void pushItem(Item item)
     {
         rear = (rear + 1) % MAX_QUEUE_IDX;
@@ -33,7 +38,9 @@ public class Inventory : MonoBehaviour
 
     Player.PlayerType playerType;
     Sprite defaultImg;
-    Image itemImage;
+    Image itemImage1;
+    Image itemImage2;
+    Image itemImage3;
 
     private void Start()
     {
@@ -41,13 +48,44 @@ public class Inventory : MonoBehaviour
         switch(playerType)
         {
             case Player.PlayerType.PlayerA:
-                itemImage = InGameUIDatabase.instance.inventoryA;
+                itemImage1 = InGameUIDatabase.instance.inventoryA_1;
+                itemImage2 = InGameUIDatabase.instance.inventoryA_2;
+                itemImage3 = InGameUIDatabase.instance.inventoryA_3;
                 break;
             case Player.PlayerType.PlayerB:
-                itemImage = InGameUIDatabase.instance.inventoryB;
+                itemImage1 = InGameUIDatabase.instance.inventoryB_1;
+                itemImage2 = InGameUIDatabase.instance.inventoryB_2;
+                itemImage3 = InGameUIDatabase.instance.inventoryB_3;
                 break;
         }
-        defaultImg = itemImage.sprite;
+        defaultImg = itemImage1.sprite;
+    }
+
+    void updateImage()
+    {
+        switch (queueCount())
+        {
+            case 0:
+                itemImage1.sprite = defaultImg;
+                itemImage2.sprite = defaultImg;
+                itemImage3.sprite = defaultImg;
+                break;
+            case 1:
+                itemImage1.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
+                itemImage2.sprite = defaultImg;
+                itemImage3.sprite = defaultImg;
+                break;
+            case 2:
+                itemImage1.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
+                itemImage2.sprite = itemQueue[(front + 2) % MAX_QUEUE_IDX].itemImages;
+                itemImage3.sprite = defaultImg;
+                break;
+            case 3:
+                itemImage1.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
+                itemImage2.sprite = itemQueue[(front + 2) % MAX_QUEUE_IDX].itemImages;
+                itemImage3.sprite = itemQueue[(front + 3) % MAX_QUEUE_IDX].itemImages;
+                break;
+        }
     }
 
     bool AddItem(Item _item)
@@ -55,7 +93,8 @@ public class Inventory : MonoBehaviour
         pushItem(_item);
 
         item = itemQueue[(front + 1) % MAX_QUEUE_IDX];
-        itemImage.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
+
+        updateImage();
 
         return true;
     }
@@ -88,14 +127,8 @@ public class Inventory : MonoBehaviour
                 break;
         }
 
-        if (isEmpty() == true)
-        {
-            itemImage.sprite = defaultImg;
-            return;
-        }
-
         item = itemQueue[(front + 1) % MAX_QUEUE_IDX];
-        itemImage.sprite = itemQueue[(front + 1) % MAX_QUEUE_IDX].itemImages;
+        updateImage();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

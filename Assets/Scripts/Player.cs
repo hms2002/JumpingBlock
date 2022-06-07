@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     {
         Boy,
         Girl,
+        GirlTwo,
+        BoyTwo,
         EndIdx
     }
     public CharacterType characterType;
@@ -43,16 +45,19 @@ public class Player : MonoBehaviour
     bool canMove;
     bool canJump;
     bool canBuild;
+    bool canSkill;
 
     IEnumerator IStartSetting()
     {
         canMove = false;
         canJump = false;
         canBuild = false;
+        canSkill = false;
         yield return new WaitForSeconds(3);
         canMove = true;
         canJump = true;
         canBuild = true;
+        canSkill = true;
     }
 
     public void PlayerConfine(float time)
@@ -66,10 +71,12 @@ public class Player : MonoBehaviour
         canMove = false;
         canJump = false;
         canBuild = false;
+        canSkill = false;
         yield return new WaitForSeconds(time);
         canMove = true;
         canJump = true;
         canBuild = true;
+        canSkill = true;
     }
 
     bool flipNormal = true;
@@ -118,7 +125,7 @@ public class Player : MonoBehaviour
     #region PlayerJump
     // #.플레이어 점프 관련 변수
     // 점프 가능한지 확인 변수
-    public LayerMask mask;
+    private int mask;
     Vector2 fromJumpPoint;
     Vector2 toJumpPoint;
 
@@ -298,6 +305,8 @@ public class Player : MonoBehaviour
 
     const float BOY_SKILL_COOL_TIME = 10f;
     const float GIRL_SKILL_COOL_TIME = 5f;
+    const float BOY_TWO_SKILL_COOL_TIME = 5f;
+    const float GIRL_TWO_SKILL_COOL_TIME = 15f;
 
     Image skillImg;
     Sprite skillSprite;
@@ -320,8 +329,10 @@ public class Player : MonoBehaviour
         skillCurTime -= Time.deltaTime;
         skillImg.fillAmount = (float)boySkillCount / (float)MAX_BOY_SKILL_COUNT;
 
-        if (Input.GetKeyDown(useSkillKeyCode) && boySkillCount > 0)
+        if (Input.GetKeyDown(useSkillKeyCode) && boySkillCount > 0 && canSkill)
         {
+            SoundManager.instance.PlayPlayerSkillEffectSound((int)characterType);
+
             boySkillCount--;
             GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.boySkillEffect, transform.position, Quaternion.identity);
             Vector3 vector3 = skillEffect.transform.localScale;
@@ -344,8 +355,10 @@ public class Player : MonoBehaviour
         skillCurTime -= Time.deltaTime;
         skillImg.fillAmount = (skillCoolTime - skillCurTime) / skillCoolTime;
 
-        if (Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0)
+        if (Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0 && canSkill)
         {
+            SoundManager.instance.PlayPlayerSkillEffectSound((int)characterType);
+
             GameObject skillEffect = Instantiate(SkillEffectDatabase.instance.girlSkillEffect, transform.position, Quaternion.identity);
             Vector3 vector3 = skillEffect.transform.localScale;
             vector3.x = sprite.flipX ? -1 : 1;
@@ -358,6 +371,59 @@ public class Player : MonoBehaviour
         //vector3.x = sprite.flipX ? -1 : 1;
         //skillEffect.transform.localScale = vector3;
     }
+
+    void GirlTwoSkill()
+    {
+        skillCurTime -= Time.deltaTime;
+        skillImg.fillAmount = (skillCoolTime - skillCurTime) / skillCoolTime;
+
+        if (Input.GetKeyDown(useSkillKeyCode) && skillCurTime <= 0 && canSkill)
+        {
+            int count = 0;
+            GameObject block = null;
+
+            SoundManager.instance.PlayPlayerSkillEffectSound((int)characterType);
+
+            anim.SetTrigger("Skill");
+
+            while(count != 10)
+            {
+                Vector2 blockPos = new Vector2(Random.Range(-7.0f, 7.0f), Random.Range(-4.0f, 4.0f));
+                block = BlockManager.instance.MakeObj(BlockManager.BlockType.DefaultBlock, blockPos);
+            
+                if (block != null) count++;
+            }
+
+            skillCurTime = skillCoolTime;
+        }
+    }
+
+    const int BOY_TWO_SKILL_MAX_STACK = 5;
+    int boyTwoSkillCount = BOY_TWO_SKILL_MAX_STACK;
+    void BoyTwoSkill()
+    {
+        skillCurTime -= Time.deltaTime;
+        skillImg.fillAmount = (float)boyTwoSkillCount / (float)BOY_TWO_SKILL_MAX_STACK;
+
+        if (Input.GetKeyDown(useSkillKeyCode) && boyTwoSkillCount > 0 && canSkill)
+        {
+            GameObject block = BlockManager.instance.MakeObj(BlockManager.BlockType.MetalBlock, transform.position - new Vector3(0, playerBoxColider.size.y / 2f + BlockManager.instance.metalBlockSizeY / 2f + 0.2f, 0));
+            if (block != null)
+            {
+                SoundManager.instance.PlayPlayerSkillEffectSound((int)characterType);
+                boyTwoSkillCount--;
+            }
+            else
+                Debug.Log("막혔어");
+        }
+        if (skillCurTime <= 0)
+        {
+            boyTwoSkillCount++;
+            if (boyTwoSkillCount > BOY_TWO_SKILL_MAX_STACK) boyTwoSkillCount = BOY_TWO_SKILL_MAX_STACK;
+            skillCurTime = skillCoolTime;
+        }
+    }
+
     #endregion
 
 
@@ -380,9 +446,11 @@ public class Player : MonoBehaviour
                 playerB = this;
                 moveKeyName = "HorizontalB";
                 jumpKeyCode = KeyCode.UpArrow;
-                buildationKeyCode = KeyCode.Keypad1;
+                buildationKeyCode = KeyCode.O;
+//                buildationKeyCode = KeyCode.Keypad1;
                 useItemKeyCode = KeyCode.DownArrow;
-                useSkillKeyCode = KeyCode.Keypad2;
+                useSkillKeyCode = KeyCode.P;
+//                useSkillKeyCode = KeyCode.Keypad2;
 
                 //skillImg.sprite = skillSprite;
                 break;
@@ -393,6 +461,7 @@ public class Player : MonoBehaviour
     {
         buildLayerMask = ((1 << LayerMask.NameToLayer("Effect")) | (1 << LayerMask.NameToLayer("Item")));
         buildLayerMask = ~buildLayerMask;
+
         //buildLayerMask = (-1) - (1 << LayerMask.NameToLayer("Effect"));
 
         sprite = GetComponent<SpriteRenderer>();
@@ -418,12 +487,17 @@ public class Player : MonoBehaviour
                 skillSprite = InGameUIDatabase.instance.boySkillSprite;
                 anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.Boy];
 
+                mask = ((1 << LayerMask.NameToLayer("Ground")));
+
                 switch (playerType)
                 {
                     case PlayerType.PlayerB:
                         sprite.flipX = false;
                         break;
                 }
+
+                // 캐릭터 이미지 적용
+                InGameUIDatabase.instance.playerCharactorImage[(int)playerType].sprite = InGameUIDatabase.instance.charactorImage[(int)CharacterType.Boy]; 
                 break;
             case CharacterType.Girl:
                 flipNormal = false;
@@ -433,13 +507,65 @@ public class Player : MonoBehaviour
                 skillSprite = InGameUIDatabase.instance.girlSkillSprite;
                 anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.Girl];
 
+                mask = ((1 << LayerMask.NameToLayer("Ground")));
+
                 switch (playerType)
                 {
+                    case PlayerType.PlayerA:
+                        sprite.flipX = false;
+                        break;
                     case PlayerType.PlayerB:
                         sprite.flipX = true;
                         break;
                 }
 
+                // 캐릭터 이미지 적용
+                InGameUIDatabase.instance.playerCharactorImage[(int)playerType].sprite = InGameUIDatabase.instance.charactorImage[(int)CharacterType.Girl];
+                break;
+            case CharacterType.GirlTwo:
+                flipNormal = false;
+                playerSkill = GirlTwoSkill;
+                skillCoolTime = skillCurTime = GIRL_TWO_SKILL_COOL_TIME;
+
+                skillSprite = InGameUIDatabase.instance.girlTwoSkillSprite;
+                anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.GirlTwo];
+
+                mask = ((1 << LayerMask.NameToLayer("Ground")));
+
+                switch (playerType)
+                {
+                    case PlayerType.PlayerA:
+                        sprite.flipX = false;
+                        break;
+                    case PlayerType.PlayerB:
+                        sprite.flipX = true;
+                        break;
+                }
+
+                // 캐릭터 이미지 적용
+                InGameUIDatabase.instance.playerCharactorImage[(int)playerType].sprite = InGameUIDatabase.instance.charactorImage[(int)CharacterType.GirlTwo];
+                break;
+            case CharacterType.BoyTwo:
+
+                playerSkill = BoyTwoSkill;
+                skillCoolTime = skillCurTime = BOY_TWO_SKILL_COOL_TIME;
+
+                skillSprite = InGameUIDatabase.instance.boyTwoSkillSprite;
+                anim.runtimeAnimatorController = AnimatorDatabase.instance.charactorAnim[(int)CharacterType.BoyTwo];
+
+                mask = ((1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("MetalGround")));
+
+                Physics2D.IgnoreLayerCollision(gameObject.layer, 9, false);
+                
+                switch (playerType)
+                {
+                    case PlayerType.PlayerB:
+                        sprite.flipX = false;
+                        break;
+                }
+
+                // 캐릭터 이미지 적용
+                InGameUIDatabase.instance.playerCharactorImage[(int)playerType].sprite = InGameUIDatabase.instance.charactorImage[(int)CharacterType.BoyTwo];
                 break;
             default:
                 Debug.LogError("타입이 맞는 게 없습니다!");
@@ -465,6 +591,9 @@ public class Player : MonoBehaviour
         blockCount = Random.Range(30, 61);
 
         blockCountText.text = "남은 블럭 갯수 : " + blockCount;
+
+        // 쿨타임 0으로 초기화 하고 시작
+        skillCurTime = 0;
     }
 
     void Update()
