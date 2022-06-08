@@ -546,7 +546,7 @@ public class Player : MonoBehaviour
                 InGameUIDatabase.instance.playerCharactorImage[(int)playerType].sprite = InGameUIDatabase.instance.charactorImage[(int)CharacterType.GirlTwo];
                 break;
             case CharacterType.BoyTwo:
-
+                flipNormal = false;
                 playerSkill = BoyTwoSkill;
                 skillCoolTime = skillCurTime = BOY_TWO_SKILL_COOL_TIME;
 
@@ -559,8 +559,11 @@ public class Player : MonoBehaviour
                 
                 switch (playerType)
                 {
-                    case PlayerType.PlayerB:
+                    case PlayerType.PlayerA:
                         sprite.flipX = false;
+                        break;
+                    case PlayerType.PlayerB:
+                        sprite.flipX = true;
                         break;
                 }
 

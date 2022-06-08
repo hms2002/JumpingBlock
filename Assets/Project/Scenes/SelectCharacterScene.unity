@@ -1164,9 +1164,15 @@ MonoBehaviour:
   characterType: 3
   smallCharactorImage: {fileID: 1937955710}
   jumpSpriteSet:
-  - {fileID: 21300000, guid: fb4d16d2b60280f4bb2eeb57bb36a680, type: 3}
+  - {fileID: 4475983910177579318, guid: 80c11270a20e3cf4fbf4355ca98d6c01, type: 3}
+  - {fileID: 1182266026351190203, guid: 80c11270a20e3cf4fbf4355ca98d6c01, type: 3}
+  - {fileID: 1312879497132303113, guid: 80c11270a20e3cf4fbf4355ca98d6c01, type: 3}
+  - {fileID: 1312879497132303113, guid: 80c11270a20e3cf4fbf4355ca98d6c01, type: 3}
+  - {fileID: 1182266026351190203, guid: 80c11270a20e3cf4fbf4355ca98d6c01, type: 3}
+  - {fileID: 4475983910177579318, guid: 80c11270a20e3cf4fbf4355ca98d6c01, type: 3}
   idleSpriteSet:
-  - {fileID: 21300000, guid: fb4d16d2b60280f4bb2eeb57bb36a680, type: 3}
+  - {fileID: -1490765072143495929, guid: 5865a5a76e20a4744a84a3c518ec4e45, type: 3}
+  - {fileID: -5382691295368174143, guid: 5865a5a76e20a4744a84a3c518ec4e45, type: 3}
   pointTransform: {fileID: 1949749280}
   objTransform: {fileID: 1924965751}
   nameText: {fileID: 1192735035}

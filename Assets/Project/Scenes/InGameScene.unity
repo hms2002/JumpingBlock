@@ -3881,7 +3881,7 @@ MonoBehaviour:
   - {fileID: 9100000, guid: 7cb854398436d1245b9278f48bd034ae, type: 2}
   - {fileID: 9100000, guid: 3dfaf07ae2f997f4b880bffbe332c0f2, type: 2}
   - {fileID: 9100000, guid: da7e373fb6a7e3d4abfb02cc70b938f4, type: 2}
-  - {fileID: 9100000, guid: 7cb854398436d1245b9278f48bd034ae, type: 2}
+  - {fileID: 9100000, guid: 45e6b2e3a7e8c3a4b8f25bd4241a9209, type: 2}
 --- !u!4 &1368318211
 Transform:
   m_ObjectHideFlags: 0
@@ -4158,7 +4158,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

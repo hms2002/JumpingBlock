@@ -101,12 +101,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    Button StartButton;
+    Button OptionButton;
+    Button ExitButton;
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("씬 로드 : " + scene.buildIndex + " 로드 모드 : " + mode);
         _sceneNum = (BuildIdx)scene.buildIndex;
         switch (sceneNum)
         {
+            case BuildIdx.MainMenu:
+                _playerCharactorType_A = Player.CharacterType.EndIdx;
+                _playerCharactorType_B = Player.CharacterType.EndIdx;
+                _backGroundType = BackGroundType.BrokenCity;
+                fadeManager = FindObjectOfType<FadeManager>();
+                StartButton = ButtonData.instance.startButton;
+                OptionButton = ButtonData.instance.optionButton;
+                ExitButton = ButtonData.instance.ExitButton;
+                StartButton.onClick.AddListener(onClickStartButton);
+                break;
             case BuildIdx.InGameScene:
                 isGameOver = false;
                 isFirstTime = true;
@@ -181,6 +195,13 @@ public class GameManager : MonoBehaviour
                                ItemDatabase.instance.DropItem(Random.Range(0, 2), new Vector3(Random.Range(-7, 8), Random.Range(-3, 4)));
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if(Input.GetKeyDown(KeyCode.Space))
+                    {
+                        SceneManager.LoadScene((int)BuildIdx.MainMenu);
                     }
                 }
                 break;
