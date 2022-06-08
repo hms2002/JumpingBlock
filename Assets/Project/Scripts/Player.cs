@@ -446,11 +446,11 @@ public class Player : MonoBehaviour
                 playerB = this;
                 moveKeyName = "HorizontalB";
                 jumpKeyCode = KeyCode.UpArrow;
-                buildationKeyCode = KeyCode.O;
-//                buildationKeyCode = KeyCode.Keypad1;
+//                buildationKeyCode = KeyCode.O;
+                buildationKeyCode = KeyCode.Keypad1;
                 useItemKeyCode = KeyCode.DownArrow;
-                useSkillKeyCode = KeyCode.P;
-//                useSkillKeyCode = KeyCode.Keypad2;
+//                useSkillKeyCode = KeyCode.P;
+                useSkillKeyCode = KeyCode.Keypad2;
 
                 //skillImg.sprite = skillSprite;
                 break;

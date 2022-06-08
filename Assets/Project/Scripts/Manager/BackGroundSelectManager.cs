@@ -16,12 +16,17 @@ public class BackGroundSelectManager : MonoBehaviour
     int transformIdx = 0;
 
     public Transform[] backGroundSelectPos;
+    public GameObject[] backGroundMaskObject;
 
     const int MIN_BACKGROUND_IDX = 0;
     const int MAX_BACKGROUND_IDX = 2;
 
+    bool isSelected = false;
+
     private void Update()
     {
+        if (isSelected) return;
+
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if(transformIdx != MIN_BACKGROUND_IDX)
@@ -38,9 +43,22 @@ public class BackGroundSelectManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Keypad1))
         {
-            GameManager.instance.backGroundType = (BackGroundType)transformIdx;
+            StartCoroutine("SelectBackGroundAction");
             // »ç¿îµå
             SoundManager.instance.PlaySelectSound();
         }
+    }
+
+    IEnumerator SelectBackGroundAction()
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            backGroundMaskObject[transformIdx].SetActive(true);
+            yield return new WaitForSeconds(0.02f);
+            backGroundMaskObject[transformIdx].SetActive(false);
+            yield return new WaitForSeconds(0.02f);
+        }
+        yield return new WaitForSeconds(0.02f);
+        GameManager.instance.backGroundType = (BackGroundType)transformIdx;
     }
 }
