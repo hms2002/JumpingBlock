@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
                 OptionButton = ButtonData.instance.optionButton;
                 ExitButton = ButtonData.instance.ExitButton;
                 StartButton.onClick.AddListener(onClickStartButton);
+                ExitButton.onClick.AddListener(onClickExitGameButton);
                 break;
             case BuildIdx.InGameScene:
                 isGameOver = false;
@@ -259,7 +260,7 @@ public class GameManager : MonoBehaviour
 
     public void onClickExitGameButton()
     {
-
+        Application.Quit();
     }
 
     #endregion MainMenu
