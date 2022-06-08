@@ -34,6 +34,12 @@ public class BlockManager : MonoBehaviour
     {
         instance = this;
 
+        if(GameManager.instance.backGroundType == BackGroundType.BrokenCity)
+        {
+            src_DefaultBlock.transform.localScale = src_DefaultBlock.transform.localScale * 0.8f;
+            src_MetalBlock.transform.localScale = src_MetalBlock.transform.localScale * 0.8f;
+        }
+
         defaultBlockCollider = src_DefaultBlock.GetComponent<BoxCollider2D>();
         defaultBlockSizeX = defaultBlockCollider.size.x;
         defaultBlockSizeY = defaultBlockCollider.size.y;

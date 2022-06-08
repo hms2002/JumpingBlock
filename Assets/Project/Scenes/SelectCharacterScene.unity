@@ -526,6 +526,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 1
+  smallCharactorImage: {fileID: 0}
+  jumpSpriteSet: []
+  idleSpriteSet: []
   pointTransform: {fileID: 0}
   objTransform: {fileID: 0}
   nameText: {fileID: 0}
@@ -625,6 +628,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 3
+  smallCharactorImage: {fileID: 0}
+  jumpSpriteSet: []
+  idleSpriteSet: []
   pointTransform: {fileID: 0}
   objTransform: {fileID: 0}
   nameText: {fileID: 0}
@@ -715,6 +721,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 1
+  smallCharactorImage: {fileID: 1584715918}
+  jumpSpriteSet:
+  - {fileID: -1100951835787521819, guid: f3eba9a4bc4ad234286c944375debe59, type: 3}
+  - {fileID: 2046066003556751712, guid: f3eba9a4bc4ad234286c944375debe59, type: 3}
+  - {fileID: -7056896310059524680, guid: f3eba9a4bc4ad234286c944375debe59, type: 3}
+  - {fileID: -7056896310059524680, guid: f3eba9a4bc4ad234286c944375debe59, type: 3}
+  - {fileID: 2046066003556751712, guid: f3eba9a4bc4ad234286c944375debe59, type: 3}
+  - {fileID: -1100951835787521819, guid: f3eba9a4bc4ad234286c944375debe59, type: 3}
+  idleSpriteSet:
+  - {fileID: 9155941554418844890, guid: 66ad04ce1eec09d409c30c606dd81f4a, type: 3}
+  - {fileID: -7572179283870453661, guid: 66ad04ce1eec09d409c30c606dd81f4a, type: 3}
   pointTransform: {fileID: 1435089215}
   objTransform: {fileID: 1838495027}
   nameText: {fileID: 1439173934}
@@ -1145,6 +1162,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 3
+  smallCharactorImage: {fileID: 1937955710}
+  jumpSpriteSet:
+  - {fileID: 21300000, guid: fb4d16d2b60280f4bb2eeb57bb36a680, type: 3}
+  idleSpriteSet:
+  - {fileID: 21300000, guid: fb4d16d2b60280f4bb2eeb57bb36a680, type: 3}
   pointTransform: {fileID: 1949749280}
   objTransform: {fileID: 1924965751}
   nameText: {fileID: 1192735035}
@@ -2381,6 +2403,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 2
+  smallCharactorImage: {fileID: 0}
+  jumpSpriteSet: []
+  idleSpriteSet: []
   pointTransform: {fileID: 0}
   objTransform: {fileID: 0}
   nameText: {fileID: 0}
@@ -3354,6 +3379,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
+  smallCharactorImage: {fileID: 809056057}
+  jumpSpriteSet:
+  - {fileID: -5482319616111380168, guid: 241702c2e4a7ac54fa79d889b60c9b28, type: 3}
+  - {fileID: -5110689822763088798, guid: 241702c2e4a7ac54fa79d889b60c9b28, type: 3}
+  - {fileID: 555208075261128254, guid: 241702c2e4a7ac54fa79d889b60c9b28, type: 3}
+  - {fileID: 3438515940963562884, guid: 241702c2e4a7ac54fa79d889b60c9b28, type: 3}
+  - {fileID: -4686265052288319160, guid: 241702c2e4a7ac54fa79d889b60c9b28, type: 3}
+  - {fileID: 7404890217262910237, guid: 241702c2e4a7ac54fa79d889b60c9b28, type: 3}
+  idleSpriteSet:
+  - {fileID: -2361929244336286096, guid: 444f2234d6084c7488ad0c4efeb9c027, type: 3}
+  - {fileID: 18432730891941316, guid: 444f2234d6084c7488ad0c4efeb9c027, type: 3}
   pointTransform: {fileID: 175464546}
   objTransform: {fileID: 999937288}
   nameText: {fileID: 550413019}
@@ -3491,6 +3527,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
+  smallCharactorImage: {fileID: 0}
+  jumpSpriteSet: []
+  idleSpriteSet: []
   pointTransform: {fileID: 0}
   objTransform: {fileID: 0}
   nameText: {fileID: 0}
@@ -3711,7 +3750,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 96fe07c884943e440a178b7e8acb7544, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fb4d16d2b60280f4bb2eeb57bb36a680, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3954,6 +3993,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 2
+  smallCharactorImage: {fileID: 2086162718}
+  jumpSpriteSet:
+  - {fileID: -3252489297492970277, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  - {fileID: -8633065641315790125, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  - {fileID: -5372155284636416115, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  - {fileID: -5372155284636416115, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  - {fileID: -8633065641315790125, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  - {fileID: -3252489297492970277, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  idleSpriteSet:
+  - {fileID: -3252489297492970277, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
+  - {fileID: -8633065641315790125, guid: cf869965c1ee1d843b5c8c751e2e16c8, type: 3}
   pointTransform: {fileID: 425509230}
   objTransform: {fileID: 1425942448}
   nameText: {fileID: 855541372}

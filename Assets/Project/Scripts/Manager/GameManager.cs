@@ -172,11 +172,14 @@ public class GameManager : MonoBehaviour
                             }
                         }
 
-                        itemSpawnCurTime -= Time.deltaTime;
-                        if(itemSpawnCurTime <= 0)
+                        if(backGroundType == BackGroundType.BrokenCity || backGroundType == BackGroundType.BrokenPark)
                         {
-                            itemSpawnCurTime = itemSpawnCoolTime;
-                           ItemDatabase.instance.DropItem(Random.Range(0, 2), new Vector3(Random.Range(-7, 8), Random.Range(-3, 4)));
+                            itemSpawnCurTime -= Time.deltaTime;
+                            if(itemSpawnCurTime <= 0)
+                            {
+                                itemSpawnCurTime = itemSpawnCoolTime;
+                               ItemDatabase.instance.DropItem(Random.Range(0, 2), new Vector3(Random.Range(-7, 8), Random.Range(-3, 4)));
+                            }
                         }
                     }
                 }

@@ -9,6 +9,9 @@ public class CharacterLock : MonoBehaviour
     public Player.CharacterType characterType;
 
     Image image;
+    public Image smallCharactorImage;
+    public Sprite[] jumpSpriteSet;
+    public Sprite[] idleSpriteSet;
 
     public RectTransform pointTransform;
     public RectTransform objTransform;
@@ -65,8 +68,15 @@ public class CharacterLock : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
-        yield return new WaitForSeconds(0.1f);
 
+        foreach(Sprite sprite in jumpSpriteSet)
+        {
+            yield return new WaitForSeconds(0.1f);
+            smallCharactorImage.sprite = sprite;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield return new WaitForSeconds(0.05f);
         switch(type)
         {
             case CharactorSelectManager.CursorType.playerA:
@@ -75,6 +85,16 @@ public class CharacterLock : MonoBehaviour
             case CharactorSelectManager.CursorType.playerB:
                 GameManager.instance.playerCharactorType_B = characterType;
                 break;
+        }
+
+        while(true)
+        {
+            foreach (Sprite sprite in idleSpriteSet)
+            {
+                yield return new WaitForSeconds(0.05f);
+                smallCharactorImage.sprite = sprite;
+                yield return new WaitForSeconds(0.05f);
+            }
         }
     }
 }

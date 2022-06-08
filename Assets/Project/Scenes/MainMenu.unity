@@ -2391,10 +2391,10 @@ MonoBehaviour:
   BuildBlockEffectSound: {fileID: 8300000, guid: 9e0ca1cac4347d6439bb5327c11e3630, type: 3}
   SelectEffectSound: {fileID: 8300000, guid: 8469d05c8adb67c4588def5101cab8c6, type: 3}
   Player_SkillEffect_Sound:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: fcdb331a6c3c44f478d59856f6ec8d01, type: 3}
+  - {fileID: 8300000, guid: 8518358517ed70441b6336de2d8c064c, type: 3}
+  - {fileID: 8300000, guid: ba9618a1ac93b614e867f74a430d1e5d, type: 3}
+  - {fileID: 8300000, guid: 14835cd3e7254144db24cfb35ee48a4d, type: 3}
 --- !u!82 &1704231684
 AudioSource:
   m_ObjectHideFlags: 0
